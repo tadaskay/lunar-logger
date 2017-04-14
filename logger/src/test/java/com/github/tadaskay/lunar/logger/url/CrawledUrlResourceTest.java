@@ -43,6 +43,7 @@ public class CrawledUrlResourceTest {
         // when
         ResponseEntity<CrawledUrl> created = restTemplate.getForEntity(location, CrawledUrl.class);
         // then
+        assertNotNull(created.getBody().getId());
         assertThat(created.getBody().getUrl(), is(urlToCrawl));
     }
 

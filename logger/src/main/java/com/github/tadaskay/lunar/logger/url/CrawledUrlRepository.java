@@ -5,7 +5,7 @@ import org.springframework.data.mongodb.repository.Query;
 
 import java.net.URL;
 
-interface CrawledUrlRepository extends MongoRepository<CrawledUrl, String> {
+public interface CrawledUrlRepository extends MongoRepository<CrawledUrl, String> {
 
     @Query(value = "{ 'url': ?0 }", exists = true)
     boolean crawledUrlExists(URL url);
