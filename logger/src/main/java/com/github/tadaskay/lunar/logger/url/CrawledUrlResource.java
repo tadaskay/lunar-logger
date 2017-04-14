@@ -23,7 +23,10 @@ class CrawledUrlResource {
     }
 
     @GetMapping
-    public List<CrawledUrl> list() {
+    public List<CrawledUrl> list(@RequestParam(name = "incomplete", defaultValue = "false") boolean incomplete) {
+        if (incomplete) {
+            return repository.findAllIncomplete();
+        }
         return repository.findAll();
     }
 

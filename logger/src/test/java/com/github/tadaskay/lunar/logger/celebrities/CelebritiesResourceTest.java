@@ -9,7 +9,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -17,7 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.http.HttpMethod.PUT;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = FixtureConfiguration.class)
@@ -29,9 +27,11 @@ public class CelebritiesResourceTest {
     @Autowired
     private CrawledUrlFixtures crawledUrlFixtures;
     @Autowired
+    private CrawledUrlApiActions crawledUrlApiActions;
+    @Autowired
     private CelebritiesFixtures celebritiesFixtures;
     @Autowired
-    private CrawledUrlApiActions crawledUrlApiActions;
+    private CelebritiesApiActions celebritiesApiActions;
 
     @Test
     public void registersCelebrities() {
@@ -42,15 +42,9 @@ public class CelebritiesResourceTest {
             .withEntry(celebritiesFixtures.registrableEntry());
 
         // when
-        ResponseEntity<Void> res = registerCelebrities(urlId, req);
+        ResponseEntity<Void> res = celebritiesApiActions.registerCelebrities(urlId, req);
         // then
         assertTrue(res.getStatusCode().is2xxSuccessful());
-    }
-
-    private ResponseEntity<Void> registerCelebrities(String urlId, RegisterCelebritiesRequest req) {
-        return restTemplate.exchange(
-            "/urls/{urlId}/celebrities",
-            PUT, new HttpEntity<>(req), Void.class, urlId);
     }
 
     @Test
@@ -65,7 +59,7 @@ public class CelebritiesResourceTest {
 
         // when
         RegisterCelebritiesRequest reqWithNoEntries = new RegisterCelebritiesRequest();
-        registerCelebrities(urlId, reqWithNoEntries);
+        celebritiesApiActions.registerCelebrities(urlId, reqWithNoEntries);
         crawledUrl = crawledUrlApiActions.get(urlId);
         // then
         assertTrue(crawledUrl.isCelebritiesReceived());

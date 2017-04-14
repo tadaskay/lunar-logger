@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @Setter
-class RegisterCelebritiesRequest {
+public class RegisterCelebritiesRequest {
 
     @NotNull
     private List<Entry> entries = new ArrayList<>();
