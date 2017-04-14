@@ -1,10 +1,17 @@
 package com.github.tadaskay.lunar.logger.remotekey;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-@Getter
-@Setter
 public class RemoteKey {
-    private String value;
+    private final String value;
+
+    @JsonCreator
+    public RemoteKey(@JsonProperty("value") String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
 }
