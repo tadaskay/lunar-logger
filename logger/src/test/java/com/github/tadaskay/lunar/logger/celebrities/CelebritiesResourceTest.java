@@ -31,17 +31,16 @@ public class CelebritiesResourceTest {
     @Test
     public void registersCelebrities() {
         // given
-        String crawledUrlId = crawledUrlFixtures.created();
-        RegisterCelebritiesRequest req = new RegisterCelebritiesRequest();
-        req.addEntry(celebritiesFixtures.registrableEntry());
-        req.addEntry(celebritiesFixtures.registrableEntry());
+        String urlId = crawledUrlFixtures.created();
+        RegisterCelebritiesRequest req = new RegisterCelebritiesRequest()
+            .withEntry(celebritiesFixtures.registrableEntry())
+            .withEntry(celebritiesFixtures.registrableEntry());
 
         // when
         ResponseEntity<Void> res = restTemplate.exchange(
             "/urls/{urlId}/celebrities",
-            PUT, new HttpEntity<>(req), Void.class, crawledUrlId);
+            PUT, new HttpEntity<>(req), Void.class, urlId);
         // then
         assertTrue(res.getStatusCode().is2xxSuccessful());
     }
-
 }

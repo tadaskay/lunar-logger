@@ -25,5 +25,4 @@ class RemoteKeyResource {
         registrar.register(urlId, new RemoteKey(req.getRemoteKey()));
         return ResponseEntity.accepted().build();
     }
-
 }

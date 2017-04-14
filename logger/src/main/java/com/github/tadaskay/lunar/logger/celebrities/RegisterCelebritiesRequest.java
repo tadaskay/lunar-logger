@@ -14,7 +14,7 @@ class RegisterCelebritiesRequest {
     @NotNull
     private List<Entry> entries = new ArrayList<>();
 
-    public RegisterCelebritiesRequest addEntry(Entry entry) {
+    RegisterCelebritiesRequest withEntry(Entry entry) {
         entries.add(entry);
         return this;
     }

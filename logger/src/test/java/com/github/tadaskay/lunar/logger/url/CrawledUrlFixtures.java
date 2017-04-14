@@ -30,5 +30,4 @@ public class CrawledUrlFixtures {
         assertNotNull(createdUrlId);
         return createdUrlId;
     }
-
 }

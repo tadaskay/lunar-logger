@@ -7,5 +7,4 @@ public interface CelebritiesRegistrar {
     List<Celebrity> list(String urlId);
 
     void register(String urlId, List<Celebrity> celebrities);
-
 }

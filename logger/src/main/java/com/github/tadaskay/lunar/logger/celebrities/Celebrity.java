@@ -10,11 +10,12 @@ import static java.util.stream.Collectors.toList;
 @Getter
 @Setter
 public class Celebrity {
+
     private String sceneName;
     private String firstName;
     private String lastName;
 
-    static List<Celebrity> create(List<RegisterCelebritiesRequest.Entry> entries) {
+    static List<Celebrity> createMany(List<RegisterCelebritiesRequest.Entry> entries) {
         return entries.stream()
             .map(entry -> {
                 Celebrity c = new Celebrity();

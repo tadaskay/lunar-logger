@@ -69,5 +69,4 @@ public class CrawledUrlResourceTest {
         // then
         assertThat(res.getStatusCode(), is(NOT_FOUND));
     }
-
 }

@@ -9,6 +9,7 @@ import java.net.URL;
 @Getter
 @Setter
 class CreateCrawledUrlRequest {
+
     @NotNull
     private URL url;
 }

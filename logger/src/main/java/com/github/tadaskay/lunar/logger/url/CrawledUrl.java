@@ -15,6 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 public class CrawledUrl {
+
     @Id
     private String id;
     private final URL url;
@@ -22,7 +23,7 @@ public class CrawledUrl {
     private RemoteKey remoteKey;
 
     @JsonCreator
-    public CrawledUrl(@JsonProperty URL url) {
+    CrawledUrl(@JsonProperty URL url) {
         this.url = url;
     }
 }

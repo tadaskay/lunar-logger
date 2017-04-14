@@ -15,5 +15,4 @@ public interface CrawledUrlRepository extends MongoRepository<CrawledUrl, String
         return Optional.ofNullable(findOne(id))
                 .orElseThrow(NotFoundException::new);
     }
-
 }

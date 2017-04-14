@@ -23,9 +23,8 @@ class CelebritiesResource {
     @PutMapping("/urls/{urlId}/celebrities")
     public ResponseEntity<Void> put(@PathVariable("urlId") String urlId,
                                     @Valid @RequestBody RegisterCelebritiesRequest request) {
-        List<Celebrity> celebrities = Celebrity.create(request.getEntries());
+        List<Celebrity> celebrities = Celebrity.createMany(request.getEntries());
         registrar.register(urlId, celebrities);
         return ResponseEntity.accepted().build();
     }
-
 }

@@ -22,7 +22,7 @@ import static org.springframework.http.HttpMethod.PUT;
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = FixtureConfiguration.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-public class RemoteKeyTest {
+public class RemoteKeyResourceTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -32,19 +32,20 @@ public class RemoteKeyTest {
     @Test
     public void registersRemoteKey() {
         // given
-        String crawledUrlId = crawledUrlFixtures.created();
+        String urlId = crawledUrlFixtures.created();
         String remoteKeyValue = Randoms.string();
         RegisterRemoteKeyRequest req = new RegisterRemoteKeyRequest(remoteKeyValue);
 
         // when
         ResponseEntity<Void> res = restTemplate.exchange(
             "/urls/{urlId}/remote-key",
-            PUT, new HttpEntity<>(req), Void.class, crawledUrlId);
+            PUT, new HttpEntity<>(req), Void.class, urlId);
         // then
         assertTrue(res.getStatusCode().is2xxSuccessful());
 
         // when
-        ResponseEntity<RemoteKey> registeredKeyRes = restTemplate.getForEntity("/urls/{urlId}/remote-key", RemoteKey.class, crawledUrlId);
+        ResponseEntity<RemoteKey> registeredKeyRes = restTemplate.getForEntity("/urls/{urlId}/remote-key", RemoteKey.class, urlId);
+        // then
         assertThat(registeredKeyRes.getBody().getValue(), is(remoteKeyValue));
     }
 }
