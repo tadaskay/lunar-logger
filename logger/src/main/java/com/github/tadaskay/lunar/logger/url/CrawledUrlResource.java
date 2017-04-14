@@ -9,7 +9,8 @@ import java.net.URI;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.ResponseEntity.*;
+import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/urls")
@@ -42,10 +43,6 @@ class CrawledUrlResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<CrawledUrl> get(@PathVariable("id") String id) {
-        CrawledUrl crawledUrl = repository.findOne(id);
-        if (crawledUrl == null) {
-            return notFound().build();
-        }
-        return ok(crawledUrl);
+        return ok(repository.requireOne(id));
     }
 }

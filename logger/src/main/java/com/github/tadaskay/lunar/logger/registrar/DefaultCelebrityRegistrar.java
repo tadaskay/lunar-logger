@@ -4,7 +4,6 @@ import com.github.tadaskay.lunar.logger.celebrities.CelebritiesRegistrar;
 import com.github.tadaskay.lunar.logger.celebrities.Celebrity;
 import com.github.tadaskay.lunar.logger.url.CrawledUrl;
 import com.github.tadaskay.lunar.logger.url.CrawledUrlRepository;
-import com.github.tadaskay.lunar.logger.url.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,19 +19,12 @@ class DefaultCelebrityRegistrar implements CelebritiesRegistrar {
 
     @Override
     public List<Celebrity> list(String urlId) {
-        CrawledUrl crawledUrl = repository.findOne(urlId);
-        if (crawledUrl == null) {
-            throw new NotFoundException();
-        }
-        return crawledUrl.getCelebrities();
+        return repository.requireOne(urlId).getCelebrities();
     }
 
     @Override
     public void register(String urlId, List<Celebrity> celebrities) {
-        CrawledUrl url = repository.findOne(urlId);
-        if (url == null) {
-            throw new NotFoundException();
-        }
+        CrawledUrl url = repository.requireOne(urlId);
         url.getCelebrities().addAll(celebrities);
         repository.save(url);
     }
