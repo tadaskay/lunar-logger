@@ -22,7 +22,7 @@ public class CrawledUrl {
     private RemoteKey remoteKey;
 
     @JsonCreator
-    public CrawledUrl(@JsonProperty("url") URL url) {
+    public CrawledUrl(@JsonProperty URL url) {
         this.url = url;
     }
 }

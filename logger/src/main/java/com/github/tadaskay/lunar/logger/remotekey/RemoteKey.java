@@ -7,7 +7,7 @@ public class RemoteKey {
     private final String value;
 
     @JsonCreator
-    public RemoteKey(@JsonProperty("value") String value) {
+    public RemoteKey(@JsonProperty String value) {
         this.value = value;
     }
 

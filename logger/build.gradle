@@ -20,11 +20,16 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-parameters'
+}
+
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
     compile 'org.springframework.boot:spring-boot-starter-hateoas'
     compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.8.7'
     compileOnly 'org.projectlombok:lombok'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     runtime 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:1.50.5'
