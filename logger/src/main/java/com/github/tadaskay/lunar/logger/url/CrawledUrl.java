@@ -19,6 +19,7 @@ public class CrawledUrl {
     @Id
     private String id;
     private final URL url;
+    private boolean celebritiesReceived;
     private List<Celebrity> celebrities = new ArrayList<>();
     private RemoteKey remoteKey;
 

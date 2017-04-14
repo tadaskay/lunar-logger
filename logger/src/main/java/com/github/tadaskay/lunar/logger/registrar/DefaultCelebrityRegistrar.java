@@ -25,6 +25,7 @@ class DefaultCelebrityRegistrar implements CelebritiesRegistrar {
     @Override
     public void register(String urlId, List<Celebrity> celebrities) {
         CrawledUrl url = repository.requireOne(urlId);
+        url.setCelebritiesReceived(true);
         url.setCelebrities(celebrities);
         repository.save(url);
     }

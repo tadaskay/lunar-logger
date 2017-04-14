@@ -1,6 +1,8 @@
 package com.github.tadaskay.lunar.logger.celebrities;
 
 import com.github.tadaskay.lunar.logger.FixtureConfiguration;
+import com.github.tadaskay.lunar.logger.url.CrawledUrl;
+import com.github.tadaskay.lunar.logger.url.CrawledUrlApiActions;
 import com.github.tadaskay.lunar.logger.url.CrawledUrlFixtures;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.http.HttpMethod.PUT;
@@ -27,6 +30,8 @@ public class CelebritiesResourceTest {
     private CrawledUrlFixtures crawledUrlFixtures;
     @Autowired
     private CelebritiesFixtures celebritiesFixtures;
+    @Autowired
+    private CrawledUrlApiActions crawledUrlApiActions;
 
     @Test
     public void registersCelebrities() {
@@ -37,10 +42,32 @@ public class CelebritiesResourceTest {
             .withEntry(celebritiesFixtures.registrableEntry());
 
         // when
-        ResponseEntity<Void> res = restTemplate.exchange(
-            "/urls/{urlId}/celebrities",
-            PUT, new HttpEntity<>(req), Void.class, urlId);
+        ResponseEntity<Void> res = registerCelebrities(urlId, req);
         // then
         assertTrue(res.getStatusCode().is2xxSuccessful());
+    }
+
+    private ResponseEntity<Void> registerCelebrities(String urlId, RegisterCelebritiesRequest req) {
+        return restTemplate.exchange(
+            "/urls/{urlId}/celebrities",
+            PUT, new HttpEntity<>(req), Void.class, urlId);
+    }
+
+    @Test
+    public void marksCelebritiesAsReceivedUponRegistration() {
+        // given
+        String urlId = crawledUrlFixtures.created();
+
+        // when
+        CrawledUrl crawledUrl = crawledUrlApiActions.get(urlId);
+        // then
+        assertFalse(crawledUrl.isCelebritiesReceived());
+
+        // when
+        RegisterCelebritiesRequest reqWithNoEntries = new RegisterCelebritiesRequest();
+        registerCelebrities(urlId, reqWithNoEntries);
+        crawledUrl = crawledUrlApiActions.get(urlId);
+        // then
+        assertTrue(crawledUrl.isCelebritiesReceived());
     }
 }
