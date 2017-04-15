@@ -1,5 +1,6 @@
 package com.github.tadaskay.lunar.logger.celebrities;
 
+import com.github.tadaskay.lunar.logger.api.RegisterCelebritiesRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -16,7 +17,7 @@ public class CelebritiesApiActions {
 
     public ResponseEntity<Void> registerCelebrities(String urlId, RegisterCelebritiesRequest req) {
         return restTemplate.exchange(
-            "/urls/{urlId}/celebrities",
+            "/urls/{id}/celebrities",
             PUT, new HttpEntity<>(req), Void.class, urlId);
     }
 }

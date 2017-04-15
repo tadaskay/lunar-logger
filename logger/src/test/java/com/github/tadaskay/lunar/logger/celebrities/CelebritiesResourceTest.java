@@ -1,14 +1,13 @@
 package com.github.tadaskay.lunar.logger.celebrities;
 
 import com.github.tadaskay.lunar.logger.FixtureConfiguration;
-import com.github.tadaskay.lunar.logger.url.CrawledUrl;
-import com.github.tadaskay.lunar.logger.url.CrawledUrlApiActions;
+import com.github.tadaskay.lunar.logger.api.CrawledUrlApiResource;
+import com.github.tadaskay.lunar.logger.api.RegisterCelebritiesRequest;
 import com.github.tadaskay.lunar.logger.url.CrawledUrlFixtures;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -23,11 +22,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 public class CelebritiesResourceTest {
 
     @Autowired
-    private TestRestTemplate restTemplate;
-    @Autowired
     private CrawledUrlFixtures crawledUrlFixtures;
-    @Autowired
-    private CrawledUrlApiActions crawledUrlApiActions;
     @Autowired
     private CelebritiesFixtures celebritiesFixtures;
     @Autowired
@@ -53,15 +48,15 @@ public class CelebritiesResourceTest {
         String urlId = crawledUrlFixtures.created();
 
         // when
-        CrawledUrl crawledUrl = crawledUrlApiActions.get(urlId);
+        CrawledUrlApiResource crawledUrl = CrawledUrlApiResource.get(urlId);
         // then
-        assertFalse(crawledUrl.isCelebritiesReceived());
+        assertFalse(crawledUrl.getData().isCelebritiesReceived());
 
         // when
         RegisterCelebritiesRequest reqWithNoEntries = new RegisterCelebritiesRequest();
         celebritiesApiActions.registerCelebrities(urlId, reqWithNoEntries);
-        crawledUrl = crawledUrlApiActions.get(urlId);
+        crawledUrl = CrawledUrlApiResource.get(urlId);
         // then
-        assertTrue(crawledUrl.isCelebritiesReceived());
+        assertTrue(crawledUrl.getData().isCelebritiesReceived());
     }
 }

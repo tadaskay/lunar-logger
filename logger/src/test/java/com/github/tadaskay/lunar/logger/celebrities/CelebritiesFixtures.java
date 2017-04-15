@@ -1,5 +1,6 @@
 package com.github.tadaskay.lunar.logger.celebrities;
 
+import com.github.tadaskay.lunar.logger.api.RegisterCelebritiesRequest;
 import com.github.tadaskay.lunar.logger.util.Randoms;
 import org.springframework.boot.test.context.TestComponent;
 

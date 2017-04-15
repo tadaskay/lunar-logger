@@ -1,6 +1,7 @@
 package com.github.tadaskay.lunar.logger.remotekey;
 
 import com.github.tadaskay.lunar.logger.FixtureConfiguration;
+import com.github.tadaskay.lunar.logger.api.RegisterRemoteKeyRequest;
 import com.github.tadaskay.lunar.logger.url.CrawledUrlFixtures;
 import com.github.tadaskay.lunar.logger.util.Randoms;
 import org.junit.Test;
@@ -38,13 +39,13 @@ public class RemoteKeyResourceTest {
 
         // when
         ResponseEntity<Void> res = restTemplate.exchange(
-            "/urls/{urlId}/remote-key",
+            "/urls/{id}/remote-key",
             PUT, new HttpEntity<>(req), Void.class, urlId);
         // then
         assertTrue(res.getStatusCode().is2xxSuccessful());
 
         // when
-        ResponseEntity<RemoteKey> registeredKeyRes = restTemplate.getForEntity("/urls/{urlId}/remote-key", RemoteKey.class, urlId);
+        ResponseEntity<RemoteKey> registeredKeyRes = restTemplate.getForEntity("/urls/{id}/remote-key", RemoteKey.class, urlId);
         // then
         assertThat(registeredKeyRes.getBody().getValue(), is(remoteKeyValue));
     }

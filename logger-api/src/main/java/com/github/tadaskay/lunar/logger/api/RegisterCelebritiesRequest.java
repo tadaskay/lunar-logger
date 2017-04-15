@@ -1,4 +1,4 @@
-package com.github.tadaskay.lunar.logger.celebrities;
+package com.github.tadaskay.lunar.logger.api;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -14,14 +14,14 @@ public class RegisterCelebritiesRequest {
     @NotNull
     private List<Entry> entries = new ArrayList<>();
 
-    RegisterCelebritiesRequest withEntry(Entry entry) {
+    public RegisterCelebritiesRequest withEntry(Entry entry) {
         entries.add(entry);
         return this;
     }
 
     @Getter
     @Setter
-    static class Entry {
+    public static class Entry {
         private String sceneName;
         private String firstName;
         private String lastName;

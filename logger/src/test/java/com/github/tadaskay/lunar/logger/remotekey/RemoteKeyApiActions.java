@@ -1,5 +1,6 @@
 package com.github.tadaskay.lunar.logger.remotekey;
 
+import com.github.tadaskay.lunar.logger.api.RegisterRemoteKeyRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestComponent;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -16,7 +17,7 @@ public class RemoteKeyApiActions {
     public void register(String urlId, String remoteKey) {
         RegisterRemoteKeyRequest req = new RegisterRemoteKeyRequest(remoteKey);
         restTemplate.exchange(
-            "/urls/{urlId}/remote-key",
+            "/urls/{id}/remote-key",
             PUT, new HttpEntity<>(req), Void.class, urlId);
     }
 }

@@ -1,24 +1,26 @@
 package com.github.tadaskay.lunar.logger.url;
 
 import com.github.tadaskay.lunar.logger.FixtureConfiguration;
+import com.github.tadaskay.lunar.logger.api.CrawledUrlApiResource;
+import com.github.tadaskay.lunar.logger.api.CrawledUrlRepresentation;
+import com.github.tadaskay.lunar.logger.api.CreateCrawledUrlRequest;
+import com.github.tadaskay.lunar.logger.api.RegisterCelebritiesRequest;
 import com.github.tadaskay.lunar.logger.celebrities.CelebritiesApiActions;
-import com.github.tadaskay.lunar.logger.celebrities.RegisterCelebritiesRequest;
 import com.github.tadaskay.lunar.logger.remotekey.RemoteKeyApiActions;
 import com.github.tadaskay.lunar.logger.util.Randoms;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -30,11 +32,7 @@ import static org.springframework.http.HttpStatus.*;
 public class CrawledUrlResourceTest {
 
     @Autowired
-    private TestRestTemplate restTemplate;
-    @Autowired
     private CrawledUrlFixtures crawledUrlFixtures;
-    @Autowired
-    private CrawledUrlApiActions crawledUrlApiActions;
     @Autowired
     private CelebritiesApiActions celebritiesApiActions;
     @Autowired
@@ -44,44 +42,38 @@ public class CrawledUrlResourceTest {
     public void createsNewCrawledUrl() throws MalformedURLException {
         // given
         URL urlToCrawl = Randoms.url();
-        CreateCrawledUrlRequest req = new CreateCrawledUrlRequest();
-        req.setUrl(urlToCrawl);
+        CreateCrawledUrlRequest req = new CreateCrawledUrlRequest(urlToCrawl);
 
         // when
-        ResponseEntity<Void> res = restTemplate.postForEntity("/urls", req, Void.class);
+        CrawledUrlApiResource crawledUrl = CrawledUrlApiResource.create(req);
+        ResponseEntity res = crawledUrl.getRawResponse();
+
         // then
         assertThat(res.getStatusCode(), is(CREATED));
-        URI location = res.getHeaders().getLocation();
-        assertNotNull(location);
-
-        // when
-        ResponseEntity<CrawledUrl> created = restTemplate.getForEntity(location, CrawledUrl.class);
-        // then
-        assertNotNull(created.getBody().getId());
-        assertThat(created.getBody().getUrl(), is(urlToCrawl));
+        assertNotNull(res.getHeaders().getLocation());
+        assertNotNull(crawledUrl.getId());
+        assertThat(crawledUrl.getData().getUrl(), is(urlToCrawl));
     }
 
     @Test
     public void doesNotAllowCrawlingSameUrlTwice() {
         // given
-        URL urlToCrawl = Randoms.url();
-        CreateCrawledUrlRequest req = new CreateCrawledUrlRequest();
-        req.setUrl(urlToCrawl);
+        CreateCrawledUrlRequest req = new CreateCrawledUrlRequest(Randoms.url());
 
         // when
-        restTemplate.postForEntity("/urls", req, Void.class);
-        ResponseEntity<Void> res = restTemplate.postForEntity("/urls", req, Void.class);
+        CrawledUrlApiResource.create(req);
+        CrawledUrlApiResource duplicate = CrawledUrlApiResource.create(req);
 
         // then
-        assertThat(res.getStatusCode(), is(CONFLICT));
+        assertThat(duplicate.getRawResponse().getStatusCode(), is(CONFLICT));
     }
 
     @Test
     public void returnsNotFoundOnNonExistingUrls() {
         // when
-        ResponseEntity<CrawledUrl> res = restTemplate.getForEntity("/urls/{id}", CrawledUrl.class, Randoms.string());
+        CrawledUrlApiResource crawledUrl = CrawledUrlApiResource.get(Randoms.string());
         // then
-        assertThat(res.getStatusCode(), is(NOT_FOUND));
+        assertThat(crawledUrl.getRawResponse().getStatusCode(), is(NOT_FOUND));
     }
 
     @Test
@@ -90,20 +82,26 @@ public class CrawledUrlResourceTest {
         String crawledUrlId = crawledUrlFixtures.created();
 
         // when
-        List<CrawledUrl> incompleteUrls = crawledUrlApiActions.list(true);
+        List<CrawledUrlRepresentation> incompleteUrls = listIncomplete();
         // then
         assertTrue(incompleteUrls.stream().anyMatch(url -> url.getId().equals(crawledUrlId)));
 
         // when
         celebritiesApiActions.registerCelebrities(crawledUrlId, new RegisterCelebritiesRequest());
-        incompleteUrls = crawledUrlApiActions.list(true);
+        incompleteUrls = listIncomplete();
         // then
         assertTrue(incompleteUrls.stream().anyMatch(url -> url.getId().equals(crawledUrlId)));
 
         // when
         remoteKeyApiActions.register(crawledUrlId, "foo");
-        incompleteUrls = crawledUrlApiActions.list(true);
+        incompleteUrls = listIncomplete();
         // then
         assertFalse(incompleteUrls.stream().anyMatch(url -> url.getId().equals(crawledUrlId)));
+    }
+
+    private List<CrawledUrlRepresentation> listIncomplete() {
+        return CrawledUrlApiResource.listIncomplete().stream()
+            .map(CrawledUrlApiResource::getData)
+            .collect(toList());
     }
 }

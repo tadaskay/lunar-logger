@@ -1,4 +1,4 @@
-package com.github.tadaskay.lunar.logger.remotekey;
+package com.github.tadaskay.lunar.logger.api;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,13 +7,13 @@ import lombok.Getter;
 import javax.validation.constraints.NotNull;
 
 @Getter
-class RegisterRemoteKeyRequest {
+public class RegisterRemoteKeyRequest {
 
     @NotNull
     private final String remoteKey;
 
     @JsonCreator
-    RegisterRemoteKeyRequest(@JsonProperty String remoteKey) {
+    public RegisterRemoteKeyRequest(@JsonProperty String remoteKey) {
         this.remoteKey = remoteKey;
     }
 }

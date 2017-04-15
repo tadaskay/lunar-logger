@@ -1,3 +1,4 @@
 rootProject.name = 'platformlunar-homework'
 
 include 'logger'
+include 'logger-api'
