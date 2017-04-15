@@ -1,7 +1,7 @@
 package com.github.tadaskay.lunar.logger.celebrities;
 
-import com.github.tadaskay.lunar.logger.api.CelebrityRepresentation;
-import com.github.tadaskay.lunar.logger.api.RegisterCelebritiesRequest;
+import com.github.tadaskay.lunar.logger.api.dto.CelebrityRepresentation;
+import com.github.tadaskay.lunar.logger.api.dto.RegisterCelebritiesRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

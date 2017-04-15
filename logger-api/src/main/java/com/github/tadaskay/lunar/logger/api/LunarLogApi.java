@@ -2,7 +2,7 @@ package com.github.tadaskay.lunar.logger.api;
 
 import org.springframework.web.client.RestTemplate;
 
-public class LogApi {
+public class LunarLogApi {
 
     public static volatile RestTemplate restTemplate;
 

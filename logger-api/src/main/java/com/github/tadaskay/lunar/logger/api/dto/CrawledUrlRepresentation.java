@@ -1,14 +1,12 @@
-package com.github.tadaskay.lunar.logger.api;
+package com.github.tadaskay.lunar.logger.api.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 public class CrawledUrlRepresentation {
 
     private String id;

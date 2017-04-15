@@ -1,7 +1,7 @@
 package com.github.tadaskay.lunar.logger.api;
 
+import com.github.tadaskay.lunar.logger.api.dto.*;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +15,15 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.PUT;
 
 @Getter
-@Setter
-public class CrawledUrlApiResource {
+public class LunarUrl {
 
     private CrawledUrlRepresentation data;
     private ResponseEntity rawResponse;
     private String id;
     private URI location;
 
-    public static CrawledUrlApiResource create(CreateCrawledUrlRequest req) {
-        ResponseEntity<Void> createRes = LogApi.restTemplate.postForEntity("/urls", req, Void.class);
+    public static LunarUrl create(CreateCrawledUrlRequest req) {
+        ResponseEntity<Void> createRes = LunarLogApi.restTemplate.postForEntity("/urls", req, Void.class);
         if (!createRes.getStatusCode().is2xxSuccessful()) {
             return failed(createRes);
         }
@@ -32,71 +31,71 @@ public class CrawledUrlApiResource {
         URI createdResLocation = createRes.getHeaders().getLocation();
         String id = locationToId(createdResLocation);
 
-        CrawledUrlApiResource apiResource = get(id);
+        LunarUrl apiResource = get(id);
         apiResource.location = createdResLocation;
         apiResource.rawResponse = createRes;
         return apiResource;
     }
 
-    public static CrawledUrlApiResource get(String id) {
-        ResponseEntity<CrawledUrlRepresentation> queryRes = LogApi.restTemplate.getForEntity(
+    public static LunarUrl get(String id) {
+        ResponseEntity<CrawledUrlRepresentation> queryRes = LunarLogApi.restTemplate.getForEntity(
             "/urls/{urlId}", CrawledUrlRepresentation.class, id);
         if (!queryRes.getStatusCode().is2xxSuccessful()) {
             return failed(queryRes);
         }
 
-        CrawledUrlApiResource apiResource = new CrawledUrlApiResource();
+        LunarUrl apiResource = new LunarUrl();
         apiResource.data = queryRes.getBody();
         apiResource.id = apiResource.data.getId();
 
         return apiResource;
     }
 
-    public static List<CrawledUrlApiResource> listIncomplete() {
+    public static List<LunarUrl> listIncomplete() {
         CrawledUrlListingFilter filter = CrawledUrlListingFilter.builder()
             .incompleteOnly(true)
             .build();
         return list(filter);
     }
 
-    public static List<CrawledUrlApiResource> list() {
+    public static List<LunarUrl> list() {
         return list(CrawledUrlListingFilter.builder().build());
     }
 
-    private static List<CrawledUrlApiResource> list(CrawledUrlListingFilter filter) {
+    private static List<LunarUrl> list(CrawledUrlListingFilter filter) {
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/urls");
         if (filter.isIncompleteOnly()) {
             uriBuilder.queryParam("incomplete", "true");
         }
-        ResponseEntity<List<CrawledUrlRepresentation>> res = LogApi.restTemplate.exchange(
+        ResponseEntity<List<CrawledUrlRepresentation>> res = LunarLogApi.restTemplate.exchange(
             uriBuilder.toUriString(), GET,
             null, new ParameterizedTypeReference<List<CrawledUrlRepresentation>>() {
             });
         return res.getBody().stream()
             .map(rep -> {
-                CrawledUrlApiResource apiResource = new CrawledUrlApiResource();
-                apiResource.setData(rep);
-                apiResource.setId(rep.getId());
-                apiResource.setRawResponse(res);
+                LunarUrl apiResource = new LunarUrl();
+                apiResource.data = rep;
+                apiResource.id = rep.getId();
+                apiResource.rawResponse = res;
                 return apiResource;
             })
             .collect(toList());
     }
 
     public void registerRemoteKey(RegisterRemoteKeyRequest req) {
-        LogApi.restTemplate.exchange(
+        LunarLogApi.restTemplate.exchange(
             "/urls/{id}/remote-key",
             PUT, new HttpEntity<>(req), Void.class, data.getId());
     }
 
     public void registerCelebrities(RegisterCelebritiesRequest req) {
-        LogApi.restTemplate.exchange(
+        LunarLogApi.restTemplate.exchange(
             "/urls/{id}/celebrities",
             PUT, new HttpEntity<>(req), Void.class, data.getId());
     }
 
-    private static CrawledUrlApiResource failed(ResponseEntity<?> res) {
-        CrawledUrlApiResource failed = new CrawledUrlApiResource();
+    private static LunarUrl failed(ResponseEntity<?> res) {
+        LunarUrl failed = new LunarUrl();
         failed.rawResponse = res;
         return failed;
     }

@@ -1,9 +1,9 @@
 package com.github.tadaskay.lunar.logger.url;
 
-import com.github.tadaskay.lunar.logger.api.CelebrityRepresentation;
-import com.github.tadaskay.lunar.logger.api.CrawledUrlRepresentation;
-import com.github.tadaskay.lunar.logger.api.CreateCrawledUrlRequest;
-import com.github.tadaskay.lunar.logger.api.RemoteKeyRepresentation;
+import com.github.tadaskay.lunar.logger.api.dto.CelebrityRepresentation;
+import com.github.tadaskay.lunar.logger.api.dto.CrawledUrlRepresentation;
+import com.github.tadaskay.lunar.logger.api.dto.CreateCrawledUrlRequest;
+import com.github.tadaskay.lunar.logger.api.dto.RemoteKeyRepresentation;
 import com.github.tadaskay.lunar.logger.celebrities.CelebritiesResource;
 import com.github.tadaskay.lunar.logger.remotekey.RemoteKeyResource;
 import org.springframework.http.ResponseEntity;

@@ -1,9 +1,9 @@
 package com.github.tadaskay.lunar.logger.celebrities;
 
 import com.github.tadaskay.lunar.logger.TestLogApiConfiguration;
-import com.github.tadaskay.lunar.logger.api.CelebrityRepresentation;
-import com.github.tadaskay.lunar.logger.api.CrawledUrlApiResource;
-import com.github.tadaskay.lunar.logger.api.RegisterCelebritiesRequest;
+import com.github.tadaskay.lunar.logger.api.dto.CelebrityRepresentation;
+import com.github.tadaskay.lunar.logger.api.LunarUrl;
+import com.github.tadaskay.lunar.logger.api.dto.RegisterCelebritiesRequest;
 import com.github.tadaskay.lunar.logger.url.CrawledUrlFixtures;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,14 +23,14 @@ public class CelebritiesResourceTest {
     @Test
     public void registersCelebrities() {
         // given
-        CrawledUrlApiResource url = CrawledUrlFixtures.randomUrlCreated();
+        LunarUrl url = CrawledUrlFixtures.randomUrlCreated();
         RegisterCelebritiesRequest.Entry celebrity1 = CelebritiesFixtures.registrableEntry();
         RegisterCelebritiesRequest.Entry celebrity2 = CelebritiesFixtures.registrableEntry();
         RegisterCelebritiesRequest req = new RegisterCelebritiesRequest().withEntry(celebrity1).withEntry(celebrity2);
 
         // when
         url.registerCelebrities(req);
-        CrawledUrlApiResource updatedUrl = CrawledUrlApiResource.get(url.getId());
+        LunarUrl updatedUrl = LunarUrl.get(url.getId());
         // then
         assertTrue(updatedUrl.getData().getCelebrities().stream()
             .anyMatch(c -> equalsToEntry(c, celebrity1)));
@@ -47,13 +47,13 @@ public class CelebritiesResourceTest {
     @Test
     public void marksCelebritiesAsReceivedUponRegistration() {
         // when
-        CrawledUrlApiResource url = CrawledUrlFixtures.randomUrlCreated();
+        LunarUrl url = CrawledUrlFixtures.randomUrlCreated();
         // then
         assertFalse(url.getData().isCelebritiesReceived());
 
         // when
         url.registerCelebrities(new RegisterCelebritiesRequest());
-        CrawledUrlApiResource updated = CrawledUrlApiResource.get(url.getId());
+        LunarUrl updated = LunarUrl.get(url.getId());
         // then
         assertTrue(updated.getData().isCelebritiesReceived());
     }

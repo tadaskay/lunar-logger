@@ -1,7 +1,7 @@
 package com.github.tadaskay.lunar.logger.remotekey;
 
-import com.github.tadaskay.lunar.logger.api.RegisterRemoteKeyRequest;
-import com.github.tadaskay.lunar.logger.api.RemoteKeyRepresentation;
+import com.github.tadaskay.lunar.logger.api.dto.RegisterRemoteKeyRequest;
+import com.github.tadaskay.lunar.logger.api.dto.RemoteKeyRepresentation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +29,6 @@ public class RemoteKeyResource {
     }
 
     public static RemoteKeyRepresentation represent(RemoteKey entity) {
-        RemoteKeyRepresentation rep = new RemoteKeyRepresentation();
-        rep.setValue(entity.getValue());
-        return rep;
+        return new RemoteKeyRepresentation(entity.getValue());
     }
 }

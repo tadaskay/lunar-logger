@@ -1,6 +1,6 @@
 package com.github.tadaskay.lunar.logger.celebrities;
 
-import com.github.tadaskay.lunar.logger.api.RegisterCelebritiesRequest;
+import com.github.tadaskay.lunar.logger.api.dto.RegisterCelebritiesRequest;
 import com.github.tadaskay.lunar.logger.util.Randoms;
 
 class CelebritiesFixtures {

@@ -1,7 +1,11 @@
 package com.github.tadaskay.lunar.logger.url;
 
 import com.github.tadaskay.lunar.logger.TestLogApiConfiguration;
-import com.github.tadaskay.lunar.logger.api.*;
+import com.github.tadaskay.lunar.logger.api.LunarUrl;
+import com.github.tadaskay.lunar.logger.api.dto.CrawledUrlRepresentation;
+import com.github.tadaskay.lunar.logger.api.dto.CreateCrawledUrlRequest;
+import com.github.tadaskay.lunar.logger.api.dto.RegisterCelebritiesRequest;
+import com.github.tadaskay.lunar.logger.api.dto.RegisterRemoteKeyRequest;
 import com.github.tadaskay.lunar.logger.util.Randoms;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,14 +36,14 @@ public class CrawledUrlResourceTest {
         CreateCrawledUrlRequest req = new CreateCrawledUrlRequest(urlToCrawl);
 
         // when
-        CrawledUrlApiResource crawledUrl = CrawledUrlApiResource.create(req);
-        ResponseEntity res = crawledUrl.getRawResponse();
+        LunarUrl url = LunarUrl.create(req);
+        ResponseEntity res = url.getRawResponse();
 
         // then
         assertThat(res.getStatusCode(), is(CREATED));
         assertNotNull(res.getHeaders().getLocation());
-        assertNotNull(crawledUrl.getId());
-        assertThat(crawledUrl.getData().getUrl(), is(urlToCrawl));
+        assertNotNull(url.getId());
+        assertThat(url.getData().getUrl(), is(urlToCrawl));
     }
 
     @Test
@@ -48,8 +52,8 @@ public class CrawledUrlResourceTest {
         CreateCrawledUrlRequest req = new CreateCrawledUrlRequest(Randoms.url());
 
         // when
-        CrawledUrlApiResource.create(req);
-        CrawledUrlApiResource duplicate = CrawledUrlApiResource.create(req);
+        LunarUrl.create(req);
+        LunarUrl duplicate = LunarUrl.create(req);
 
         // then
         assertThat(duplicate.getRawResponse().getStatusCode(), is(CONFLICT));
@@ -58,15 +62,15 @@ public class CrawledUrlResourceTest {
     @Test
     public void returnsNotFoundOnNonExistingUrls() {
         // when
-        CrawledUrlApiResource crawledUrl = CrawledUrlApiResource.get(Randoms.string());
+        LunarUrl url = LunarUrl.get(Randoms.string());
         // then
-        assertThat(crawledUrl.getRawResponse().getStatusCode(), is(NOT_FOUND));
+        assertThat(url.getRawResponse().getStatusCode(), is(NOT_FOUND));
     }
 
     @Test
     public void crawlIsIncompleteUntilCelebritiesAndRemoteKeyAreRegistered() {
         // given
-        CrawledUrlApiResource url = CrawledUrlFixtures.randomUrlCreated();
+        LunarUrl url = CrawledUrlFixtures.randomUrlCreated();
 
         // when
         List<CrawledUrlRepresentation> incompleteUrls = listIncomplete();
@@ -87,8 +91,8 @@ public class CrawledUrlResourceTest {
     }
 
     private List<CrawledUrlRepresentation> listIncomplete() {
-        return CrawledUrlApiResource.listIncomplete().stream()
-            .map(CrawledUrlApiResource::getData)
+        return LunarUrl.listIncomplete().stream()
+            .map(LunarUrl::getData)
             .collect(toList());
     }
 }

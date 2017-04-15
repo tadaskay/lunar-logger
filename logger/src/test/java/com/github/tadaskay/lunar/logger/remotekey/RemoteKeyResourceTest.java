@@ -1,8 +1,8 @@
 package com.github.tadaskay.lunar.logger.remotekey;
 
 import com.github.tadaskay.lunar.logger.TestLogApiConfiguration;
-import com.github.tadaskay.lunar.logger.api.CrawledUrlApiResource;
-import com.github.tadaskay.lunar.logger.api.RegisterRemoteKeyRequest;
+import com.github.tadaskay.lunar.logger.api.LunarUrl;
+import com.github.tadaskay.lunar.logger.api.dto.RegisterRemoteKeyRequest;
 import com.github.tadaskay.lunar.logger.url.CrawledUrlFixtures;
 import com.github.tadaskay.lunar.logger.util.Randoms;
 import org.junit.Test;
@@ -23,13 +23,13 @@ public class RemoteKeyResourceTest {
     @Test
     public void registersRemoteKey() {
         // given
-        CrawledUrlApiResource crawledUrl = CrawledUrlFixtures.randomUrlCreated();
+        LunarUrl url = CrawledUrlFixtures.randomUrlCreated();
         String remoteKeyValue = Randoms.string();
         RegisterRemoteKeyRequest req = new RegisterRemoteKeyRequest(remoteKeyValue);
 
         // when
-        crawledUrl.registerRemoteKey(req);
-        CrawledUrlApiResource updated = CrawledUrlApiResource.get(crawledUrl.getId());
+        url.registerRemoteKey(req);
+        LunarUrl updated = LunarUrl.get(url.getId());
 
         // then
         assertThat(updated.getData().getRemoteKey().getValue(), is(remoteKeyValue));

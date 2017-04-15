@@ -1,13 +1,13 @@
 package com.github.tadaskay.lunar.logger.url;
 
-import com.github.tadaskay.lunar.logger.api.CrawledUrlApiResource;
-import com.github.tadaskay.lunar.logger.api.CreateCrawledUrlRequest;
+import com.github.tadaskay.lunar.logger.api.LunarUrl;
+import com.github.tadaskay.lunar.logger.api.dto.CreateCrawledUrlRequest;
 import com.github.tadaskay.lunar.logger.util.Randoms;
 
 public class CrawledUrlFixtures {
 
-    public static CrawledUrlApiResource randomUrlCreated() {
+    public static LunarUrl randomUrlCreated() {
         CreateCrawledUrlRequest req = new CreateCrawledUrlRequest(Randoms.url());
-        return CrawledUrlApiResource.create(req);
+        return LunarUrl.create(req);
     }
 }

@@ -1,4 +1,4 @@
-package com.github.tadaskay.lunar.logger.api;
+package com.github.tadaskay.lunar.logger.api.dto;
 
 import lombok.Builder;
 import lombok.Getter;
