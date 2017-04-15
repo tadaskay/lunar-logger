@@ -1,10 +1,8 @@
 package com.github.tadaskay.lunar.logger.api;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class CelebrityRepresentation {
 
     private String sceneName;

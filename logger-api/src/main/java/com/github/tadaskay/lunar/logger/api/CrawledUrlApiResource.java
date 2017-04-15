@@ -3,6 +3,7 @@ package com.github.tadaskay.lunar.logger.api;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PUT;
 
 @Getter
 @Setter
@@ -79,6 +81,18 @@ public class CrawledUrlApiResource {
                 return apiResource;
             })
             .collect(toList());
+    }
+
+    public void registerRemoteKey(RegisterRemoteKeyRequest req) {
+        LogApi.restTemplate.exchange(
+            "/urls/{id}/remote-key",
+            PUT, new HttpEntity<>(req), Void.class, data.getId());
+    }
+
+    public void registerCelebrities(RegisterCelebritiesRequest req) {
+        LogApi.restTemplate.exchange(
+            "/urls/{id}/celebrities",
+            PUT, new HttpEntity<>(req), Void.class, data.getId());
     }
 
     private static CrawledUrlApiResource failed(ResponseEntity<?> res) {

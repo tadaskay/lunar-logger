@@ -1,16 +1,10 @@
 package com.github.tadaskay.lunar.logger.url;
 
-import com.github.tadaskay.lunar.logger.FixtureConfiguration;
-import com.github.tadaskay.lunar.logger.api.CrawledUrlApiResource;
-import com.github.tadaskay.lunar.logger.api.CrawledUrlRepresentation;
-import com.github.tadaskay.lunar.logger.api.CreateCrawledUrlRequest;
-import com.github.tadaskay.lunar.logger.api.RegisterCelebritiesRequest;
-import com.github.tadaskay.lunar.logger.celebrities.CelebritiesApiActions;
-import com.github.tadaskay.lunar.logger.remotekey.RemoteKeyApiActions;
+import com.github.tadaskay.lunar.logger.TestLogApiConfiguration;
+import com.github.tadaskay.lunar.logger.api.*;
 import com.github.tadaskay.lunar.logger.util.Randoms;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ContextConfiguration;
@@ -27,16 +21,9 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 import static org.springframework.http.HttpStatus.*;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = FixtureConfiguration.class)
+@ContextConfiguration(classes = TestLogApiConfiguration.class)
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class CrawledUrlResourceTest {
-
-    @Autowired
-    private CrawledUrlFixtures crawledUrlFixtures;
-    @Autowired
-    private CelebritiesApiActions celebritiesApiActions;
-    @Autowired
-    private RemoteKeyApiActions remoteKeyApiActions;
 
     @Test
     public void createsNewCrawledUrl() throws MalformedURLException {
@@ -79,24 +66,24 @@ public class CrawledUrlResourceTest {
     @Test
     public void crawlIsIncompleteUntilCelebritiesAndRemoteKeyAreRegistered() {
         // given
-        String crawledUrlId = crawledUrlFixtures.created();
+        CrawledUrlApiResource url = CrawledUrlFixtures.randomUrlCreated();
 
         // when
         List<CrawledUrlRepresentation> incompleteUrls = listIncomplete();
         // then
-        assertTrue(incompleteUrls.stream().anyMatch(url -> url.getId().equals(crawledUrlId)));
+        assertTrue(incompleteUrls.stream().anyMatch(u -> url.getId().equals(u.getId())));
 
         // when
-        celebritiesApiActions.registerCelebrities(crawledUrlId, new RegisterCelebritiesRequest());
+        url.registerCelebrities(new RegisterCelebritiesRequest());
         incompleteUrls = listIncomplete();
         // then
-        assertTrue(incompleteUrls.stream().anyMatch(url -> url.getId().equals(crawledUrlId)));
+        assertTrue(incompleteUrls.stream().anyMatch(u -> url.getId().equals(u.getId())));
 
         // when
-        remoteKeyApiActions.register(crawledUrlId, "foo");
+        url.registerRemoteKey(new RegisterRemoteKeyRequest("foo"));
         incompleteUrls = listIncomplete();
         // then
-        assertFalse(incompleteUrls.stream().anyMatch(url -> url.getId().equals(crawledUrlId)));
+        assertFalse(incompleteUrls.stream().anyMatch(u -> url.getId().equals(u.getId())));
     }
 
     private List<CrawledUrlRepresentation> listIncomplete() {
