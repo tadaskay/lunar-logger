@@ -1,6 +1,8 @@
-# Lunar homework
+# Lunar logger
 
-TODO describe
+For a given URL, **crawler** is extracting famous people and storing them in remote repository.
+
+**logger** REST API provides write-ahead-log functionality for the **crawler**. 
 
 ## Running app
 
