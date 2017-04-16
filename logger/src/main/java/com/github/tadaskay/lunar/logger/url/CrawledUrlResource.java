@@ -18,12 +18,14 @@ import java.net.URI;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 @RequestMapping("/api/urls")
-class CrawledUrlResource {
+public class CrawledUrlResource {
 
     private final UrlRegistrar registrar;
 
@@ -32,7 +34,7 @@ class CrawledUrlResource {
     }
 
     @GetMapping
-    public List<CrawledUrlRepresentation> list(@RequestParam(name = "incomplete", defaultValue = "false") boolean incomplete) {
+    public List<CrawledUrlRepresentation> list(@RequestParam(name = "incomplete", defaultValue = "false") Boolean incomplete) {
         List<CrawledUrl> urls = incomplete ?
             registrar.listIncomplete()
             : registrar.list();
@@ -75,6 +77,16 @@ class CrawledUrlResource {
             rep.setRemoteKey(remoteKey);
         }
 
+        addLinks(rep);
         return rep;
+    }
+
+    private static void addLinks(CrawledUrlRepresentation rep) {
+        if (!rep.isCelebritiesReceived()) {
+            rep.add(linkTo(methodOn(CelebritiesResource.class).put(rep.getId(), null)).withRel("register-celebrities"));
+        }
+        if (rep.getRemoteKey() == null) {
+            rep.add(linkTo(methodOn(RemoteKeyResource.class).put(rep.getId(), null)).withRel("register-remote-key"));
+        }
     }
 }

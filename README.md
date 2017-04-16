@@ -44,12 +44,14 @@ url -> celebrities
 url -> remotekey
 registrar -> *
 ```
+- Some basic hypermedia. It should be possible to navigate from the API index (`/api`)
 
 ## Acknowledgments
 
 To minimize the scope, the following were not implemented:
 
-- Hypermedia
+- Crawler exercising Hypermedia links to navigate API
+- Crawler with different strategies: randomly crashing, completing incomplete URLs, etc.
 - Paging
 - Security
 - Query optimizations

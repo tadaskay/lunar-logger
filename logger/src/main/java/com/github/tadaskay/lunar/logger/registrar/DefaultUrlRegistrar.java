@@ -1,8 +1,8 @@
 package com.github.tadaskay.lunar.logger.registrar;
 
+import com.github.tadaskay.lunar.logger.ex.DuplicateUrlException;
 import com.github.tadaskay.lunar.logger.url.CrawledUrl;
 import com.github.tadaskay.lunar.logger.url.CrawledUrlRepository;
-import com.github.tadaskay.lunar.logger.ex.DuplicateUrlException;
 import com.github.tadaskay.lunar.logger.url.UrlRegistrar;
 import org.springframework.stereotype.Service;
 

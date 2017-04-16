@@ -1,13 +1,15 @@
 package com.github.tadaskay.lunar.logger.api.dto;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
-public class CrawledUrlRepresentation {
+@Getter
+@Setter
+public class CrawledUrlRepresentation extends HalResource {
 
     private String id;
     private URL url;

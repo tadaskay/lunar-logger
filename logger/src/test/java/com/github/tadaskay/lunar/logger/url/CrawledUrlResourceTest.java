@@ -68,6 +68,29 @@ public class CrawledUrlResourceTest {
     }
 
     @Test
+    public void hypermediaLinksRepresentPossibleActionsForUrl() {
+        // when
+        LunarUrl url = CrawledUrlFixtures.randomUrlCreated();
+        // then
+        assertTrue(url.getData().hasLink("register-celebrities"));
+        assertTrue(url.getData().hasLink("register-remote-key"));
+
+        // when
+        url.registerCelebrities(new RegisterCelebritiesRequest());
+        url = LunarUrl.get(url.getId());
+        // then
+        assertFalse(url.getData().hasLink("register-celebrities"));
+        assertTrue(url.getData().hasLink("register-remote-key"));
+
+        // when
+        url.registerRemoteKey(new RegisterRemoteKeyRequest("foo"));
+        url = LunarUrl.get(url.getId());
+        // then
+        assertFalse(url.getData().hasLink("register-celebrities"));
+        assertFalse(url.getData().hasLink("register-remote-key"));
+    }
+
+    @Test
     public void crawlIsIncompleteUntilCelebritiesAndRemoteKeyAreRegistered() {
         // given
         LunarUrl url = CrawledUrlFixtures.randomUrlCreated();
