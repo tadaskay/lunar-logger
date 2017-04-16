@@ -29,5 +29,6 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-hateoas'
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.8.7'
+    compile 'io.codearte.jfairy:jfairy:0.5.7'
     compileOnly 'org.projectlombok:lombok'
 }
