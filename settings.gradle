@@ -1,4 +1,5 @@
 rootProject.name = 'platformlunar-homework'
 
+include 'crawler'
 include 'logger'
 include 'logger-api'
