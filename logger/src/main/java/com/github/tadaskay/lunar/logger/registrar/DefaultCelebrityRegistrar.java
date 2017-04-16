@@ -2,6 +2,7 @@ package com.github.tadaskay.lunar.logger.registrar;
 
 import com.github.tadaskay.lunar.logger.celebrities.CelebritiesRegistrar;
 import com.github.tadaskay.lunar.logger.celebrities.Celebrity;
+import com.github.tadaskay.lunar.logger.ex.AlreadyCrawledException;
 import com.github.tadaskay.lunar.logger.url.CrawledUrl;
 import com.github.tadaskay.lunar.logger.url.CrawledUrlRepository;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,9 @@ class DefaultCelebrityRegistrar implements CelebritiesRegistrar {
     @Override
     public void register(String urlId, List<Celebrity> celebrities) {
         CrawledUrl url = repository.requireOne(urlId);
+        if (url.isCelebritiesReceived()) {
+            throw new AlreadyCrawledException();
+        }
         url.setCelebritiesReceived(true);
         url.setCelebrities(celebrities);
         repository.save(url);

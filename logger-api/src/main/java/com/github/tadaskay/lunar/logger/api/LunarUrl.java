@@ -88,8 +88,8 @@ public class LunarUrl {
             PUT, new HttpEntity<>(req), Void.class, data.getId());
     }
 
-    public void registerCelebrities(RegisterCelebritiesRequest req) {
-        LunarLogApi.restTemplate.exchange(
+    public ResponseEntity<Void> registerCelebrities(RegisterCelebritiesRequest req) {
+        return LunarLogApi.restTemplate.exchange(
             "/api/urls/{id}/celebrities",
             PUT, new HttpEntity<>(req), Void.class, data.getId());
     }
