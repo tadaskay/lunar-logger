@@ -1,4 +1,4 @@
-package com.github.tadaskay.lunar.logger.url;
+package com.github.tadaskay.lunar.logger.ex;
 
 import org.springframework.web.bind.annotation.ResponseStatus;
 

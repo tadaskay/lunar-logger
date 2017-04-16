@@ -11,6 +11,7 @@ Pre-requisites:
 - JDK8
 - docker 1.12.0+
 - docker-compose 1.6.0+
+- for IDE: lombok plugin and enabled annotation-processors
 
 ```
 $ ./gradlew build
