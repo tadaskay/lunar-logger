@@ -1,0 +1,8 @@
+version: '2.1'
+services:
+  logger:
+    build: ./logger
+    ports:
+      - "8080:8080"
+    volumes:
+      - .embedmongo:/home/app/.embedmongo

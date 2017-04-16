@@ -4,17 +4,23 @@ TODO describe
 
 ## Running app
 
+Pre-requisites:
+
+- JDK8
+- docker 1.12.0+
+- docker-compose 1.6.0+
+
 ```
 ./gradlew build
-./gradlew bootRun
+docker-compose up --build
 ```
 
 After startup, the following are accessible:
 
-- API docs: http://localhost:8080/swagger-ui.html
-- API: http://localhost:8080/api
-- Health: http://localhost:8080/health
-- Metrics: http://localhost:8080/metrics
+- Logger API docs: http://localhost:8080/swagger-ui.html
+- Logger API: http://localhost:8080/api
+- Logger health: http://localhost:8080/health
+- Logger metrics: http://localhost:8080/metrics
 
 ## Design notes
 
