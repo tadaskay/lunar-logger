@@ -20,17 +20,12 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType(JavaCompile) {
-    options.compilerArgs << '-parameters'
-}
-
 dependencies {
     compile project(':logger-api')
     compile 'org.springframework.boot:spring-boot-starter-actuator'
     compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
     compile 'org.springframework.boot:spring-boot-starter-hateoas'
     compile 'org.springframework.boot:spring-boot-starter-web'
-    compile 'com.fasterxml.jackson.module:jackson-module-parameter-names:2.8.7'
     compile 'io.springfox:springfox-swagger2:2.6.1'
     compile 'io.springfox:springfox-swagger-ui:2.6.1'
     compileOnly 'org.projectlombok:lombok'

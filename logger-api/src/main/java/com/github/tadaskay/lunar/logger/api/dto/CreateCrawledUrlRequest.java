@@ -14,7 +14,7 @@ public class CreateCrawledUrlRequest {
     private final URL url;
 
     @JsonCreator
-    public CreateCrawledUrlRequest(@JsonProperty URL url) {
+    public CreateCrawledUrlRequest(@JsonProperty("url") URL url) {
         this.url = url;
     }
 }

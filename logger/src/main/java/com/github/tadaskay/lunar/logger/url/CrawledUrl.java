@@ -24,7 +24,7 @@ public class CrawledUrl {
     private RemoteKey remoteKey;
 
     @JsonCreator
-    public CrawledUrl(@JsonProperty URL url) {
+    public CrawledUrl(@JsonProperty("url") URL url) {
         this.url = url;
     }
 }

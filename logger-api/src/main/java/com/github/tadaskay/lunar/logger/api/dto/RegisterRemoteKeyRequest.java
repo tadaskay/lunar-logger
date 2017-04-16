@@ -13,7 +13,7 @@ public class RegisterRemoteKeyRequest {
     private final String remoteKey;
 
     @JsonCreator
-    public RegisterRemoteKeyRequest(@JsonProperty String remoteKey) {
+    public RegisterRemoteKeyRequest(@JsonProperty("remoteKey") String remoteKey) {
         this.remoteKey = remoteKey;
     }
 }
