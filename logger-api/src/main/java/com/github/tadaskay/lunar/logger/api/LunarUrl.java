@@ -82,8 +82,8 @@ public class LunarUrl {
             .collect(toList());
     }
 
-    public void registerRemoteKey(RegisterRemoteKeyRequest req) {
-        LunarLogApi.restTemplate.exchange(
+    public ResponseEntity<Void> registerRemoteKey(RegisterRemoteKeyRequest req) {
+        return LunarLogApi.restTemplate.exchange(
             "/api/urls/{id}/remote-key",
             PUT, new HttpEntity<>(req), Void.class, data.getId());
     }

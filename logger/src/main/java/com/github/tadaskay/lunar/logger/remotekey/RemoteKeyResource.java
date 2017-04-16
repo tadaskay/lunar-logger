@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.HttpURLConnection;
 
 @RestController
 public class RemoteKeyResource {
@@ -25,8 +24,9 @@ public class RemoteKeyResource {
     }
 
     @ApiResponses({
-        @ApiResponse(code = HttpURLConnection.HTTP_ACCEPTED, message = "Accepted"),
-        @ApiResponse(code = HttpURLConnection.HTTP_NOT_FOUND, message = "URL not found"),
+        @ApiResponse(code = 202, message = "Accepted"),
+        @ApiResponse(code = 404, message = "URL not found"),
+        @ApiResponse(code = 422, message = "Already crawled")
     })
     @PutMapping("/api/urls/{id}/remote-key")
     public ResponseEntity<Void> put(@PathVariable("id") String urlId,

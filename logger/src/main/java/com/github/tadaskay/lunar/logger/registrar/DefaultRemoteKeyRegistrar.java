@@ -1,5 +1,6 @@
 package com.github.tadaskay.lunar.logger.registrar;
 
+import com.github.tadaskay.lunar.logger.ex.AlreadyCrawledException;
 import com.github.tadaskay.lunar.logger.remotekey.RemoteKey;
 import com.github.tadaskay.lunar.logger.remotekey.RemoteKeyRegistrar;
 import com.github.tadaskay.lunar.logger.url.CrawledUrl;
@@ -23,6 +24,9 @@ class DefaultRemoteKeyRegistrar implements RemoteKeyRegistrar {
     @Override
     public void register(String urlId, RemoteKey remoteKey) {
         CrawledUrl crawledUrl = repository.requireOne(urlId);
+        if (crawledUrl.getRemoteKey() != null) {
+            throw new AlreadyCrawledException();
+        }
         crawledUrl.setRemoteKey(remoteKey);
         repository.save(crawledUrl);
     }
