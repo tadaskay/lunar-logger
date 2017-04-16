@@ -6,11 +6,14 @@ import com.github.tadaskay.lunar.logger.api.dto.CreateCrawledUrlRequest;
 import com.github.tadaskay.lunar.logger.api.dto.RemoteKeyRepresentation;
 import com.github.tadaskay.lunar.logger.celebrities.CelebritiesResource;
 import com.github.tadaskay.lunar.logger.remotekey.RemoteKeyResource;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.List;
 
@@ -20,7 +23,7 @@ import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/urls")
+@RequestMapping("/api/urls")
 class CrawledUrlResource {
 
     private final CrawledUrlRepository repository;
@@ -40,6 +43,10 @@ class CrawledUrlResource {
             .collect(toList());
     }
 
+    @ApiResponses({
+        @ApiResponse(code = HttpURLConnection.HTTP_CREATED, message = "Created"),
+        @ApiResponse(code = HttpURLConnection.HTTP_CONFLICT, message = "Already exists")
+    })
     @PostMapping
     public ResponseEntity<CrawledUrlRepresentation> create(@Valid @RequestBody CreateCrawledUrlRequest request,
                                                            UriComponentsBuilder uriBuilder) {

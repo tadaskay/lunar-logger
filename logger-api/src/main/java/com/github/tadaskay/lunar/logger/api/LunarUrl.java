@@ -23,7 +23,7 @@ public class LunarUrl {
     private URI location;
 
     public static LunarUrl create(CreateCrawledUrlRequest req) {
-        ResponseEntity<Void> createRes = LunarLogApi.restTemplate.postForEntity("/urls", req, Void.class);
+        ResponseEntity<Void> createRes = LunarLogApi.restTemplate.postForEntity("/api/urls", req, Void.class);
         if (!createRes.getStatusCode().is2xxSuccessful()) {
             return failed(createRes);
         }
@@ -39,7 +39,7 @@ public class LunarUrl {
 
     public static LunarUrl get(String id) {
         ResponseEntity<CrawledUrlRepresentation> queryRes = LunarLogApi.restTemplate.getForEntity(
-            "/urls/{urlId}", CrawledUrlRepresentation.class, id);
+            "/api/urls/{urlId}", CrawledUrlRepresentation.class, id);
         if (!queryRes.getStatusCode().is2xxSuccessful()) {
             return failed(queryRes);
         }
@@ -63,7 +63,7 @@ public class LunarUrl {
     }
 
     private static List<LunarUrl> list(CrawledUrlListingFilter filter) {
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/urls");
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromPath("/api/urls");
         if (filter.isIncompleteOnly()) {
             uriBuilder.queryParam("incomplete", "true");
         }
@@ -84,13 +84,13 @@ public class LunarUrl {
 
     public void registerRemoteKey(RegisterRemoteKeyRequest req) {
         LunarLogApi.restTemplate.exchange(
-            "/urls/{id}/remote-key",
+            "/api/urls/{id}/remote-key",
             PUT, new HttpEntity<>(req), Void.class, data.getId());
     }
 
     public void registerCelebrities(RegisterCelebritiesRequest req) {
         LunarLogApi.restTemplate.exchange(
-            "/urls/{id}/celebrities",
+            "/api/urls/{id}/celebrities",
             PUT, new HttpEntity<>(req), Void.class, data.getId());
     }
 

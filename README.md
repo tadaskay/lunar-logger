@@ -11,7 +11,8 @@ TODO describe
 
 After startup, the following are accessible:
 
-- API: http://localhost:8080
+- API docs: http://localhost:8080/swagger-ui.html
+- API: http://localhost:8080/api
 - Health: http://localhost:8080/health
 - Metrics: http://localhost:8080/metrics
 
