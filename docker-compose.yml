@@ -4,5 +4,7 @@ services:
     build: ./logger
     ports:
       - "8080:8080"
+    environment:
+      EMBEDDED_MONGO_ARTIFACTS: /opt/lunarlogger/.embedmongo
     volumes:
-      - .embedmongo:/home/app/.embedmongo
+      - .embedmongo:/opt/lunarlogger/.embedmongo

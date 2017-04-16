@@ -1,11 +1,9 @@
 FROM openjdk:8u121-jre
 
-RUN useradd -ms /bin/bash app
-RUN mkdir -p /home/app/.embedmongo
-RUN chown app:app /home/app/.embedmongo
+ENV APP_HOME /opt/lunarlogger
 
-USER app
-WORKDIR /home/app
+RUN mkdir -p $APP_HOME/.embedmongo
+WORKDIR $APP_HOME
 ADD build/libs/logger*.jar app.jar
 
 EXPOSE 8080
