@@ -8,3 +8,7 @@ services:
       EMBEDDED_MONGO_ARTIFACTS: /opt/lunarlogger/.embedmongo
     volumes:
       - .embedmongo:/opt/lunarlogger/.embedmongo
+  crawler:
+    build: ./crawler
+    links:
+      - logger

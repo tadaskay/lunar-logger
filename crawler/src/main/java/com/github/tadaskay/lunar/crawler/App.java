@@ -17,8 +17,9 @@ public class App {
 
     @Bean
     RestTemplate restTemplate() {
+        String loggerUriString = System.getenv().getOrDefault("LOGGER_URL", "http://logger:8080");
         return new RestTemplateBuilder()
-            .rootUri("http://localhost:8080")
+            .rootUri(loggerUriString)
             .build();
     }
 

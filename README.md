@@ -11,8 +11,8 @@ Pre-requisites:
 - docker-compose 1.6.0+
 
 ```
-./gradlew build
-docker-compose up --build
+$ ./gradlew build
+$ docker-compose up --build
 ```
 
 After startup, the following are accessible:
@@ -21,6 +21,12 @@ After startup, the following are accessible:
 - Logger API: http://localhost:8080/api
 - Logger health: http://localhost:8080/health
 - Logger metrics: http://localhost:8080/metrics
+
+Add more crawler instances:
+
+```
+$ docker-compose scale crawler=5
+```
 
 ## Design notes
 
