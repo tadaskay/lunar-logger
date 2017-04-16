@@ -44,3 +44,8 @@ To minimize the scope, the following were not implemented:
 - Paging
 - Security
 - Query optimizations
+- Proper immutability on representations, etc.
+- Document locking/versioning
+- Metrics exporter to console (they are available via endpoint)
+- Additional layer of separation between entities and resources, 
+but given the size of the app, it is absolutely not needed at the moment
