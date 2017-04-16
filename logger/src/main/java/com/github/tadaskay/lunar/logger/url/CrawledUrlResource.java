@@ -18,7 +18,6 @@ import java.net.URI;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
-import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.ResponseEntity.created;
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -26,17 +25,17 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/api/urls")
 class CrawledUrlResource {
 
-    private final CrawledUrlRepository repository;
+    private final UrlRegistrar registrar;
 
-    public CrawledUrlResource(CrawledUrlRepository repository) {
-        this.repository = repository;
+    CrawledUrlResource(UrlRegistrar registrar) {
+        this.registrar = registrar;
     }
 
     @GetMapping
     public List<CrawledUrlRepresentation> list(@RequestParam(name = "incomplete", defaultValue = "false") boolean incomplete) {
         List<CrawledUrl> urls = incomplete ?
-            repository.findAllIncomplete()
-            : repository.findAll();
+            registrar.listIncomplete()
+            : registrar.list();
 
         return urls.stream()
             .map(CrawledUrlResource::represent)
@@ -50,20 +49,14 @@ class CrawledUrlResource {
     @PostMapping
     public ResponseEntity<CrawledUrlRepresentation> create(@Valid @RequestBody CreateCrawledUrlRequest request,
                                                            UriComponentsBuilder uriBuilder) {
-        if (repository.crawledUrlExists(request.getUrl())) {
-            return new ResponseEntity<>(CONFLICT);
-        }
-
-        CrawledUrl crawledUrl = new CrawledUrl(request.getUrl());
-        crawledUrl = repository.save(crawledUrl);
-
+        CrawledUrl crawledUrl = registrar.register(request.getUrl());
         URI location = uriBuilder.path("/urls/{id}").buildAndExpand(crawledUrl.getId()).toUri();
         return created(location).body(represent(crawledUrl));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CrawledUrlRepresentation> get(@PathVariable("id") String id) {
-        return ok(represent(repository.requireOne(id)));
+        return ok(represent(registrar.get(id)));
     }
 
     private static CrawledUrlRepresentation represent(CrawledUrl entity) {
